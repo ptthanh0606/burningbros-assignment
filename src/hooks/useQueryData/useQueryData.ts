@@ -1,4 +1,5 @@
 import { UseBaseQueryOptions, useQuery } from "react-query";
+import useShowSnackbar from "src/hooks/useShowSnackbar/useShowSnackbar";
 import { DoQueryParams, doQuery } from "src/service/doQuery";
 import { createServiceEndpoint } from "src/service/service-creator";
 import { EntityKey } from "src/service/type";
@@ -16,19 +17,27 @@ const useQueryData = <T>({
   dependencies,
   options,
 }: UseQueryDataParams<T>) => {
+  const showSnackbar = useShowSnackbar();
+
   const endpoint = createServiceEndpoint(entity);
 
   const queryKey = dependencies ? [entity, ...dependencies] : [entity];
 
   return useQuery<T, Error>(
     queryKey,
-    async () =>
-      await doQuery({
+    () =>
+      doQuery({
         endpoint,
         action,
         requestData,
       }),
-    options
+    {
+      ...options,
+      onError: (error) => {
+        console.error("debug error", error);
+        showSnackbar("There was an unknown error. Please try again!", "error");
+      },
+    }
   );
 };
 

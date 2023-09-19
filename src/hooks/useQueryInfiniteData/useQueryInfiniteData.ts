@@ -1,5 +1,6 @@
 import { UseInfiniteQueryOptions, useInfiniteQuery } from "react-query";
 import { Pagination } from "src/entity/pagination";
+import useShowSnackbar from "src/hooks/useShowSnackbar/useShowSnackbar";
 import { DoQueryParams, doQuery } from "src/service/doQuery";
 import { createServiceEndpoint } from "src/service/service-creator";
 import { EntityKey } from "src/service/type";
@@ -18,14 +19,16 @@ const useQueryInfiniteData = <T extends Pagination>({
   dependencies,
   options,
 }: UseQueryInfiniteDataParams<T>) => {
+  const showSnackbar = useShowSnackbar();
+
   const endpoint = createServiceEndpoint(entity);
 
   const queryKey = dependencies ? [entity, ...dependencies] : [entity];
 
   return useInfiniteQuery<T, Error>(
     queryKey,
-    async ({ pageParam = 0 }) =>
-      await doQuery({
+    ({ pageParam = 0 }) =>
+      doQuery({
         endpoint,
         action,
         requestData: {
@@ -35,6 +38,10 @@ const useQueryInfiniteData = <T extends Pagination>({
       }),
     {
       ...options,
+      onError: (error) => {
+        console.error("debug error", error);
+        showSnackbar("There was an unknown error. Please try again!", "error");
+      },
       getNextPageParam: (lastPage) => {
         const nextOffset = lastPage.skip + lastPage.limit;
 

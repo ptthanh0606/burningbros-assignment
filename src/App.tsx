@@ -1,6 +1,7 @@
 import { ThemeProvider, createTheme } from "@mui/material";
 import Home from "src/pages/Home/Home";
 import { QueryClient, QueryClientProvider } from "react-query";
+import SnackbarContextProvider from "src/contexts/SnackbarContext";
 
 const customizedMUITheme = createTheme({
   palette: {
@@ -18,11 +19,13 @@ const queryClient = new QueryClient();
 
 const App = () => {
   return (
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider theme={customizedMUITheme}>
-        <Home />
-      </ThemeProvider>
-    </QueryClientProvider>
+    <SnackbarContextProvider>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider theme={customizedMUITheme}>
+          <Home />
+        </ThemeProvider>
+      </QueryClientProvider>
+    </SnackbarContextProvider>
   );
 };
 
