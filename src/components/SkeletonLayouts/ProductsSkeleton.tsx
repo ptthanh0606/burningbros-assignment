@@ -1,7 +1,7 @@
 import { Grid, Skeleton } from "@mui/material";
 import { LIMIT_PRODUCTS } from "src/service/constants";
 
-const ProductSkeletons = () => {
+const ProductsSkeleton = () => {
   return (
     <Grid container spacing={1} display={"flex"}>
       {[...Array(LIMIT_PRODUCTS)].map((_, index) => (
@@ -13,4 +13,4 @@ const ProductSkeletons = () => {
   );
 };
 
-export default ProductSkeletons;
+export default ProductsSkeleton;
