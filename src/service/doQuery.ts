@@ -13,6 +13,10 @@ export interface DoQueryParams {
   requestData?: RequestData;
 }
 
+const getEndpointWithSearch = (searchQuery: string) => {
+  return `/search?q=${searchQuery}`;
+};
+
 export const doQuery = async <T>({
   endpoint,
   action,
@@ -23,24 +27,36 @@ export const doQuery = async <T>({
   switch (action) {
     case "GetOne": {
       if (!requestData || !requestData.id) {
-        throw new Error(`Missing id param in ${fullEndpoint}`);
+        throw new Error(`Missing id param for ${fullEndpoint}`);
       }
 
       fullEndpoint += `/${requestData?.id}`;
+
+      break;
+    }
+
+    case "GetMany": {
+      if (requestData?.searchQuery && requestData.searchQuery.trim()) {
+        fullEndpoint += getEndpointWithSearch(requestData.searchQuery.trim());
+      }
+
       break;
     }
 
     case "GetManyWithPagination": {
-      if (requestData) {
-        const offset = requestData.offset ?? 0;
-        const paginationParamsString = `limit=${LIMIT_PRODUCTS}&skip=${offset}`;
-
-        if (requestData.searchQuery && requestData.searchQuery.trim()) {
-          fullEndpoint += `/search?q=${requestData.searchQuery}&${paginationParamsString}`;
-        } else {
-          fullEndpoint += `?${paginationParamsString}`;
-        }
+      if (!requestData || typeof requestData.offset === "undefined") {
+        throw new Error(`Missing offset param for ${fullEndpoint}`);
       }
+
+      const paginationParamsString = `limit=${LIMIT_PRODUCTS}&skip=${requestData.offset}`;
+
+      if (requestData.searchQuery && requestData.searchQuery.trim()) {
+        const endpointWithSearch = getEndpointWithSearch(
+          requestData.searchQuery.trim()
+        );
+
+        fullEndpoint += `${endpointWithSearch}&${paginationParamsString}`;
+      } else fullEndpoint += `?${paginationParamsString}`;
 
       break;
     }

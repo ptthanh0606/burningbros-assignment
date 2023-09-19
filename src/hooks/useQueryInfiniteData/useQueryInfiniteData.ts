@@ -24,7 +24,7 @@ const useQueryInfiniteData = <T extends Pagination>({
 
   return useInfiniteQuery<T, Error>(
     queryKey,
-    async ({ pageParam }) =>
+    async ({ pageParam = 0 }) =>
       await doQuery({
         endpoint,
         action,
