@@ -28,10 +28,11 @@ const Home = () => {
     dependencies: [searchInput],
   });
 
-  const { data: categoriesData } = useQueryData<CategoryMany>({
-    entity: "category",
-    action: "GetMany",
-  });
+  const { data: categoriesData, isLoading: isLoadingCategories } =
+    useQueryData<CategoryMany>({
+      entity: "category",
+      action: "GetMany",
+    });
 
   const handleSearchProduct: HeaderProps["onChangeSearchInput"] = (event) => {
     debounce(() => {
@@ -46,9 +47,12 @@ const Home = () => {
       <Container maxWidth="xl">
         <Grid container>
           <Grid item xs={2} pr={1}>
-            <Category categories={categoriesData} />
+            <Category
+              categories={categoriesData}
+              isLoadingCategories={isLoadingCategories}
+            />
           </Grid>
-          <Grid item xs={10} container flexDirection="column" pt={1}>
+          <Grid item xs={10} container flexDirection="column" pt={1.5}>
             <ProductCardList
               data={productPages}
               isLoading={isLoadingProducts}
