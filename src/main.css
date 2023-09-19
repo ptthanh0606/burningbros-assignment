@@ -1,0 +1,14 @@
+body {
+  font-family: "Roboto", sans-serif;
+}
+
+html {
+  overflow-y: scroll;
+}
+
+body,
+html,
+#root {
+  margin: 0;
+  padding: 0;
+}
