@@ -3,7 +3,7 @@ Author: Phan Thông Thành
 ## BurningBros interview assignment
 
 This is my project for BurningBros interview assignment for frontend engineer role
-Project is deployed using Vercel at: (burningbros-assignment.vercel.app)[burningbros-assignment.vercel.app]
+Project is deployed using Vercel at: [burningbros-assignment.vercel.app](burningbros-assignment.vercel.app)
 
 ---
 
