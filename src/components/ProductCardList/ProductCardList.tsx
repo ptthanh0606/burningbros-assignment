@@ -1,9 +1,10 @@
-import { Box, Grid, Skeleton } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import { InfiniteData } from "react-query";
 import GreetingMessage from "src/components/GreetingMessage/GreetingMessage";
 import MessagePresentation from "src/components/MessagePresentation/MessagePresentation";
 import ProductCard from "src/components/ProductCard/ProductCard";
-import ProductSkeletons from "src/components/ProductSkeletons/ProductSkeletons";
+import ProductListSkeleton from "src/components/SkeletonLayouts/ProductListSkeleton";
+import ProductsSkeleton from "src/components/SkeletonLayouts/ProductsSkeleton";
 import { ProductMany } from "src/entity/product";
 import useObserveElement from "src/hooks/useObserveElement/useObserveElement";
 
@@ -28,16 +29,7 @@ const ProductCardList = ({
     },
   });
 
-  if (!data || isLoading) {
-    return (
-      <>
-        <Box mb={1}>
-          <Skeleton height="1.5rem" />
-        </Box>
-        <ProductSkeletons />
-      </>
-    );
-  }
+  if (!data || isLoading) return <ProductListSkeleton />;
 
   if (!data.pages[0].products.length) return <MessagePresentation />;
 
@@ -59,7 +51,7 @@ const ProductCardList = ({
 
       {hasNextPage ? (
         <div ref={targetObserveRef}>
-          <ProductSkeletons />
+          <ProductsSkeleton />
         </div>
       ) : null}
     </Box>
