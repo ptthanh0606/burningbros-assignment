@@ -66,7 +66,10 @@ export const doQuery = async <T>({
     }
   }
 
-  const response = await fetch(fullEndpoint);
-
-  return (await response.json()) as T;
+  try {
+    const response = await fetch(fullEndpoint);
+    return (await response.json()) as T;
+  } catch (error) {
+    throw new Error(error.message);
+  }
 };
